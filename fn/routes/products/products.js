@@ -9,28 +9,37 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
     const { query } = req;
-
-    console.log(query)
-
-    const catalog = await Catalogs.findOne(query);
-    const category = await Categories.findOne(query);
-    const brand = await Brands.findOne(query);
-    const color = await Colors.findOne(query);
+    const { catalog, category, color, brand } = query;
     const filter = {};
-    if (catalog) filter.catalog = catalog.id;
-    if (category) filter.category = category.id;
-    if (brand) filter.brand = brand.id;
-    if (color) filter.color = color.id;
-    console.log(filter)
+
+    if (catalog) {
+        const catalogItem = await Catalogs.find({ catalog });
+        filter.catalog = catalogItem[0].id;
+    }
+    if (category) {
+        const categotyItem = await Categories.find({ category });
+        filter.category = categotyItem[0].id;
+    }
+    if (brand) {
+        const brandItem = await Brands.find({ brand });
+        filter.brand = brandItem[0].id;
+    }
+    if (color) {
+        const colorItem = await Colors.find({ color });
+        filter.color = colorItem[0].id;
+    }
 
     try {
-        const productsFiltered = await Products.find(filter);
-        if (productsFiltered.length) {
-            res.status(200).send(productsFiltered);
-        } else {
-            const products = await Products.find().populate('catalog');
-            res.status(200).send(products);
+        const products = await Products.find(filter)
+            .populate('catalog')
+            .populate('category')
+            .populate('color')
+            .populate('brand');
+        if (!products) {
+            return res.status(404).send({ message: 'Products not found ' });
         }
+
+        res.status(200).send(products);
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
