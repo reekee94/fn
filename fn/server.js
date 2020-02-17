@@ -6,7 +6,7 @@ const auth = require('./routes/users/auth');
 const users = require('./routes/users/users');
 const products = require('./routes/products/products');
 const catalogs = require('./routes/products/catalogs');
-
+const generator = require('./routes/generator/generateProducts');
 const app = express();
 
 connectDB();
@@ -22,7 +22,8 @@ app.use('/auth', auth);
 app.use('/users', users);
 app.use('/products', products);
 app.use('/catalogs', catalogs);
+app.use('/gererate', generator);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

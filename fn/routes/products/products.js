@@ -59,11 +59,11 @@ async function getProduct(req, res, next) {
 
 router.post('/', async (req, res) => {
     try {
-        const requestedCatalog = req.body.catalog;
+        const requestedCatalog = {catalog: chance.pick(['men', 'women', 'kids'], 1) };
         const catalog = await Catalogs.findOne(requestedCatalog);
         if (!catalog) throw { message: 'Bad catalog name' };
 
-        const requestedCategory = req.body.category;
+        const requestedCategory = {category: chance.pick(['Dresses', 'Sweaters', 'Jeans', 'T-Shirts', 'Shoes', 'Hoodies'], 1)};
         let category = await Categories.findOne(requestedCategory);
         if (!category) {
             category = new Categories({
@@ -72,7 +72,7 @@ router.post('/', async (req, res) => {
             category = await category.save();
         }
 
-        const requestedBrand = req.body.brand;
+        const requestedBrand = {brand: chance.pick(['Zori', 'Addic', 'Hikee', 'Ruma', 'Cassics', 'Tier', 'Dive', 'Tommy Kesh'], 1)};
         let brand = await Brands.findOne(requestedBrand);
         if (!brand) {
             brand = new Brands({
@@ -81,7 +81,7 @@ router.post('/', async (req, res) => {
             brand = await brand.save();
         }
 
-        const requestedColor = req.body.color;
+        const requestedColor = {color: chance.pick(['Red', 'Black', 'Blue', 'White', 'Green', 'Yellow'], 1)};
         let color = await Colors.findOne(requestedColor);
         if (!color) {
             color = new Colors({
@@ -89,16 +89,22 @@ router.post('/', async (req, res) => {
             });
             color = await color.save();
         }
-
+        let props = {
+            size: chance.pick(['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', "XS", "S", "M", "L", "XL", "XXL"], 1),
+            available: chance.integer({ min: 1, max: 20 }),
+            sku: chance.string({ length: 8, casing: 'upper', alpha: true, numeric: true }),
+            mrsp: chance.integer({ min: 100, max: 1000 }),
+            price: chance.integer({ min: 100, max: 1000 })
+        };
         const product = new Products({
             catalog,
             category,
             brand,
-            title: req.body.title,
-            description: req.body.description,
+            title: `${this.brand} ${chance.sentence({ words: 5 })}`,
+            description: chance.paragraph(),
             color,
-            images: req.body.images,
-            propetries: req.body.propetries,
+            images: [],
+            propetries: [props],
         });
 
         const newProduct = await product.save();
