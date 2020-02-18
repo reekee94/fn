@@ -70,8 +70,9 @@ router.post('/', async (req, res) => {
             });
             product.title = `${product.category.category} ${product.brand.brand} ${chance.sentence({ words: 3, casing: 'lower' })}`
 
-            if (catalog == 'women') {
-                switch (product.category) {
+            if (product.catalog == 'women') {
+                switch (product.catalog) {
+
                     case 'Dresses':
                         product.images = [`blank_dress_${catalog}`];
                         break;
@@ -91,7 +92,7 @@ router.post('/', async (req, res) => {
                         product.images = [`blank_hoodie_${catalog}`];
                         break;
                 }
-            } else if (catalog == 'men') {
+            } else if (product.catalog.catalog == 'men') {
                 switch (product.category) {
                     case 'Sweater':
                         product.images = [`blank_sweater_${catalog}`];
@@ -112,7 +113,7 @@ router.post('/', async (req, res) => {
                         product.images = [`blank_hoodie_${catalog}`];
                 }
             } else {
-                switch (product.category) {
+                switch (product.category.category) {
                     case 'Dresses':
                         product.images = [`blank_dress_${catalog}`];
                         break;
