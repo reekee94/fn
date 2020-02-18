@@ -12,13 +12,13 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
     try {
-        setInterval(async() => {
+        //setInterval(async() => {
             const requestedCatalog = { catalog: chance.pick(["men", "women", "kids"], 1) };
             const catalog = await Catalogs.findOne(requestedCatalog);
             if (!catalog) throw { message: 'Bad catalog name' };
 
             const requestedCategory = {
-                category: chance.pick(['Dresses', 'Sweaters', 'Jeans', 'T-Shirts', 'Shoes', 'Hoodies'], 1),
+                category: chance.pick(['dresses', 'sweaters', 'jeans', 't-shirts', 'shoes', 'hoodies'], 1),
             };
             let category = await Categories.findOne(requestedCategory);
             if (!category) {
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
             }
 
             const requestedBrand = {
-                brand: chance.pick(['Zori', 'Addic', 'Hikee', 'Ruma', 'Cassics', 'Tier', 'Dive', 'Tommy Kesh'], 1),
+                brand: chance.pick(['zori', 'addic', 'hikee', 'ruma', 'cassics', 'tier', 'dive', 'tommy kesh', 'gosha', 'medicine'], 1),
             };
             let brand = await Brands.findOne(requestedBrand);
             if (!brand) {
@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
                 brand = await brand.save();
             }
 
-            const requestedColor = { color: chance.pick(['Red', 'Black', 'Blue', 'White', 'Green', 'Yellow'], 1) };
+            const requestedColor = { color: chance.pick(['red', 'black', 'blue', 'white', 'green', 'yellow'], 1) };
             let color = await Colors.findOne(requestedColor);
             if (!color) {
                 color = new Colors({
@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
                 mrsp: chance.integer({ min: 100, max: 1000 }),
                 price: undefined,
             };
-            props.price = parseInt(props.mrsp * 0.8);
+            props.price = parseInt(props.mrsp * chance.pick([0.6, 0.7, 0.8, 0.9], 1));
             const product = new Products({
                 catalog,
                 category,
@@ -68,75 +68,12 @@ router.post('/', async (req, res) => {
                 images: [],
                 propetries: [props],
             });
-            product.title = `${product.category.category} ${product.brand.brand} ${chance.sentence({ words: 3, casing: 'lower' })}`
-
-            if (product.catalog == 'women') {
-                switch (product.catalog) {
-
-                    case 'Dresses':
-                        product.images = [`blank_dress_${catalog}`];
-                        break;
-                    case 'Sweater':
-                        product.images = [`blank_sweater_${catalog}`];
-                        break;
-                    case 'Jeans':
-                        product.images = [`blank_jeans_${catalog}`];
-                        break;
-                    case 'T-Shirts':
-                        product.images = [`blank_tshirt_${catalog}`];
-                        break;
-                    case 'Shoes':
-                        product.images = [`blank_shoes_${catalog}`];
-                        break;
-                    case 'Hoodies':
-                        product.images = [`blank_hoodie_${catalog}`];
-                        break;
-                }
-            } else if (product.catalog.catalog == 'men') {
-                switch (product.category) {
-                    case 'Sweater':
-                        product.images = [`blank_sweater_${catalog}`];
-                        break;
-                    case 'Jeans':
-                        product.images = [`blank_jeans_${catalog}`];
-                        break;
-                    case 'T-Shirts':
-                        product.images = [`blank_tshirt_${catalog}`];
-                        break;
-                    case 'Shoes':
-                        product.images = [`blank_shoes_${catalog}`];
-                        break;
-                    case 'Hoodies':
-                        product.images = [`blank_hoodie_${catalog}`];
-                        break;
-                    default:
-                        product.images = [`blank_hoodie_${catalog}`];
-                }
-            } else {
-                switch (product.category.category) {
-                    case 'Dresses':
-                        product.images = [`blank_dress_${catalog}`];
-                        break;
-                    case 'Sweater':
-                        product.images = [`blank_sweater_${catalog}`];
-                        break;
-                    case 'Jeans':
-                        product.images = [`blank_jeans_${catalog}`];
-                        break;
-                    case 'T-Shirts':
-                        product.images = [`blank_tshirt_${catalog}`];
-                        break;
-                    case 'Shoes':
-                        product.images = [`blank_shoes_${catalog}`];
-                        break;
-                    case 'Hoodies':
-                        product.images = [`blank_hoodie_${catalog}`];
-                        break;
-                }
-            }
+            product.title = `${product.category.category} ${product.brand.brand} ${chance.sentence({ words: 3 }).toLocaleString()}`;
+            product.images = `${product.catalog.catalog}_${product.category.category}.jpg`;
+            if (product.catalog.catalog === 'men' && product.category.category === 'dresses'){product.category.category = 'hoodies'}
             const newProduct = await product.save();
             res.status(201).send(newProduct);
-        }, 10000)
+        //}, 10000)
     } catch (err) {
         res.status(400).send({ message: err.message });
     }

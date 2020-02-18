@@ -17,9 +17,9 @@ const app = express();
 
 connectDB();
 app.use(morgan('dev'));
-let accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
-morgan.token('body', (req, res) => console.log(JSON.stringify(req.body)));
-app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {stream: accessLogStream } ));
+// let accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+// morgan.token('body', (req, res) => console.log(JSON.stringify(req.body)));
+// app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"', {stream: accessLogStream } ));
 app.use(express.json({ extended: false }));
 
 
