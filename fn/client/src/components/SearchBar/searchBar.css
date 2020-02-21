@@ -1,0 +1,13 @@
+.productItem{
+    border: 1px solid black;
+    width: 400px;
+    height: 200px;
+    text-align: center;
+    margin: 10px;
+}
+.wrapper{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+}
