@@ -1,87 +1,72 @@
 const express = require('express');
-const Products = require('../../models/Product');
-const ProductPropetries = require('../../models/ProductPropetries');
-const { productValidationRules, validate } = require('../../middleware/validator');
 
-const { Catalogs, Categories, Brands, Colors } = ProductPropetries;
+const Products = require('../../models/Product');
+const Catalogs = require('../../models/Catalog');
+const Categories = require('../../models/Category');
+const Brands = require('../../models/Brand');
+const Colors = require('../../models/Color');
+
+const { productValidationRules, validate } = require('../../middleware/validator');
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
     const { query } = req;
-    const { catalog, category, color, brand } = query;
-    const filter = {};
-
-    if (catalog) {
-        const catalogItem = await Catalogs.find({ catalog });
-        filter.catalog = catalogItem[0].id;
-    }
-    if (category) {
-        const categotyItem = await Categories.find({ category });
-        filter.category = categotyItem[0].id;
-    }
-    if (brand) {
-        const brandItem = await Brands.find({ brand });
-        filter.brand = brandItem[0].id;
-    }
-    if (color) {
-        const colorItem = await Colors.find({ color });
-        filter.color = colorItem[0].id;
-    }
 
     try {
+        const filter = await getQueries(query, res);
         const products = await Products.find(filter)
             .populate('catalog')
             .populate('category')
             .populate('color')
             .populate('brand');
-        if (!products) {
-            return res.status(404).send({ message: 'Products not found ' });
-        }
 
+        if (!products) {
+            throw { message: 'Products not found ' };
+        }
         res.status(200).send(products);
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
 });
 
-router.get('/:id', getProduct, (req, res) => {
-    console.log(res.product);
-    res.status(200).send(res.product);
-});
-
-async function getProduct(req, res, next) {
+router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    let product;
     try {
-        product = await Products.findById(id);
-        if (!product) {
-            throw { message: 'Can not find product' };
-        }
+        const product = await Products.findById(id);
+        if (!product) throw { message: 'Can not find product' };
+        res.status(200).send(product);
     } catch (err) {
         return res.status(500).send({ message: err.message });
     }
+});
 
-    res.product = product;
-    next();
-}
-
-router.post('/', async (req, res) => {
+router.post('/', productValidationRules(), validate, async (req, res) => {
+    const { title, description, images, propetries } = req.body;
     try {
-        const requestedCatalog = {catalog: chance.pick(['men', 'women', 'kids'], 1) };
+        const requestedCatalog = req.body.catalog;
         const catalog = await Catalogs.findOne(requestedCatalog);
         if (!catalog) throw { message: 'Bad catalog name' };
 
-        const requestedCategory = {category: chance.pick(['Dresses', 'Sweaters', 'Jeans', 'T-Shirts', 'Shoes', 'Hoodies'], 1)};
+        const requestedCategory = req.body.category;
         let category = await Categories.findOne(requestedCategory);
         if (!category) {
             category = new Categories({
                 category: requestedCategory.category,
             });
             category = await category.save();
+            catalog.categories.push(category);
+            await catalog.save();
         }
 
-        const requestedBrand = {brand: chance.pick(['Zori', 'Addic', 'Hikee', 'Ruma', 'Cassics', 'Tier', 'Dive', 'Tommy Kesh'], 1)};
+        const condition = catalog.categories.findIndex(valueId => valueId === category.id);
+
+        if (condition < 0) {
+            catalog.categories.push(category);
+            await catalog.save();
+        }
+
+        const requestedBrand = req.body.brand;
         let brand = await Brands.findOne(requestedBrand);
         if (!brand) {
             brand = new Brands({
@@ -90,7 +75,7 @@ router.post('/', async (req, res) => {
             brand = await brand.save();
         }
 
-        const requestedColor = {color: chance.pick(['Red', 'Black', 'Blue', 'White', 'Green', 'Yellow'], 1)};
+        const requestedColor = req.body.color;
         let color = await Colors.findOne(requestedColor);
         if (!color) {
             color = new Colors({
@@ -98,22 +83,16 @@ router.post('/', async (req, res) => {
             });
             color = await color.save();
         }
-        let props = {
-            size: chance.pick(['36', '37', '38', '39', '40', '41', '42', '43', '44', '45', "XS", "S", "M", "L", "XL", "XXL"], 1),
-            available: chance.integer({ min: 1, max: 20 }),
-            sku: chance.string({ length: 8, casing: 'upper', alpha: true, numeric: true }),
-            mrsp: chance.integer({ min: 100, max: 1000 }),
-            price: chance.integer({ min: 100, max: 1000 })
-        };
+
         const product = new Products({
             catalog,
             category,
             brand,
-            title: `${this.brand} ${chance.sentence({ words: 5 })}`,
-            description: chance.paragraph(),
+            title,
+            description,
             color,
-            images: [],
-            propetries: [props],
+            images,
+            propetries,
         });
 
         const newProduct = await product.save();
@@ -122,5 +101,37 @@ router.post('/', async (req, res) => {
         res.status(400).send({ message: err.message });
     }
 });
+
+async function getQueries(query, res) {
+    const { catalog, category, color, brand } = query;
+    const filter = {};
+
+    try {
+        if (catalog) {
+            const catalogItems = await Catalogs.find({ catalog: { $in: catalog } });
+            catalogItems.forEach((value, i, array) => (array[i] = value.id));
+            filter.catalog = { $in: catalogItems };
+        }
+        if (category) {
+            const categoryItems = await Categories.find({ category: { $in: category } });
+            categoryItems.forEach((value, i, array) => (array[i] = value.id));
+            filter.category = { $in: categoryItems };
+        }
+        if (brand) {
+            const brandItems = await Brands.find({ brand: { $in: brand } });
+            brandItems.forEach((value, i, array) => (array[i] = value.id));
+            filter.brand = { $in: brandItems };
+        }
+        if (color) {
+            const colorFilter = await Colors.find({ color: { $in: color } });
+            colorFilter.forEach((value, i, array) => (array[i] = value.id));
+            filter.color = { $in: colorFilter };
+        }
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+
+    return filter;
+}
 
 module.exports = router;

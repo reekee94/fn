@@ -5,11 +5,9 @@ const { Schema } = mongoose;
 const UserModel = new Schema({
     firstName: {
         type: String,
-        required: true,
     },
     lastName: {
         type: String,
-        required: true,
     },
     email: {
         type: String,
@@ -27,6 +25,8 @@ const UserModel = new Schema({
         type: Date,
         default: Date.now,
     },
+    tokens: [String],
+    wishlist: [{ type: Schema.Types.ObjectId, ref: 'product' }],
 });
 
 const Users = mongoose.model('user', UserModel);
