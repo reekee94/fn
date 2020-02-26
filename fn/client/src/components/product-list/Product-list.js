@@ -13,8 +13,12 @@ function ProductList() {
     useEffect(() => {
             axios.get('https://jsonplaceholder.typicode.com/posts')
             .then(res => setPosts(res.data));
+            if(localStorage.getItem("postPerPage") !== null){
+                setPostsPerPage(localStorage.getItem("postPerPage"))
+            }
     }, []);
 
+    
     // Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -22,7 +26,10 @@ function ProductList() {
 
     // Change view
     const paginateMethod = value => setCurrentPage(value);
-    const changeItemsMethod = number => setPostsPerPage(number);
+    const changeItemsMethod = number => {
+        setPostsPerPage(number);
+        localStorage.setItem("postPerPage", number);
+    };
     const changePagination = () => setCurrentPage(1);
 
     return (
