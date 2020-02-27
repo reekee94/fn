@@ -1,19 +1,14 @@
-const filterAddBrand = brand => ({
-    type: 'FILTER_ADD_BRAND',
-    payload: brand,
-});
-const filterRemoveBrand = brand => ({
-    type: 'FILTER_REMOVE_BRAND',
-    payload: brand,
-});
+import { categoriesLoaded } from "./Categories-actions";
+import { productsLoaded } from "./Products-actions";
 
-const filterAddCategory = (category) => ({
-    type: 'FILTER_ADD_CATEGORY',
-    payload: category,
-});
-const filterRemoveCategory = (category) => ({
-    type: 'FILTER_REMOVE_CATEGORY',
-    payload: category,
-});
+import { 
+    catalogLoaded,
+    catalogsLoaded,
+ } from "./Catalogs-actions"
 
-export { filterAddBrand, filterRemoveBrand, filterAddCategory, filterRemoveCategory };
+export {
+    categoriesLoaded,
+    productsLoaded,
+    catalogLoaded,
+    catalogsLoaded,
+}
