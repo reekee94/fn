@@ -42,7 +42,6 @@ export default class AppHeaderNavLeft extends React.Component {
         <Dropdown className="d-inline-block" onMouseOver={() => this.onMouseEnter('menDropdownOpen')}
                   onMouseLeave={() => this.onMouseLeave('menDropdownOpen')}
                   isOpen={this.state.menDropdownOpen} toggle={() => this.toggle('menDropdownOpen')}>
-
           <DropdownToggle caret>
             <Link to="/catalogs/men">Men</Link>
           </DropdownToggle>
@@ -59,6 +58,17 @@ export default class AppHeaderNavLeft extends React.Component {
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem> <CategoriesNav catalog={'women'}/> </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+
+        <Dropdown className="d-inline-block" onMouseOver={() => this.onMouseEnter('kidsDropdownOpen')}
+                  onMouseLeave={() => this.onMouseLeave('kidsDropdownOpen')}
+                  isOpen={this.state.kidsDropdownOpen} toggle={() => this.toggle('kidsDropdownOpen')}>
+          <DropdownToggle caret>
+            <Link to="/catalogs/kids">Kids</Link>
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem> <CategoriesNav catalog={'kids'}/> </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
