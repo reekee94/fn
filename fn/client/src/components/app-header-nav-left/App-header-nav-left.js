@@ -42,19 +42,19 @@ export default class AppHeaderNavLeft extends React.Component {
         <Dropdown className="d-inline-block" onMouseOver={() => this.onMouseEnter('menDropdownOpen')}
                   onMouseLeave={() => this.onMouseLeave('menDropdownOpen')}
                   isOpen={this.state.menDropdownOpen} toggle={() => this.toggle('menDropdownOpen')}>
-          <DropdownToggle caret>
-            <Link to="/catalogs/men">Men</Link>
+          <DropdownToggle  className='link-button'>
+            <Link to="/catalogs/men" className='link-name'>Men</Link>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem> <CategoriesNav catalog={'men'}/> </DropdownItem>
+            <DropdownItem> <CategoriesNav  catalog={'men'}/> </DropdownItem>
           </DropdownMenu>
         </Dropdown>
 
         <Dropdown className="d-inline-block" onMouseOver={() => this.onMouseEnter('womenDropdownOpen')}
                   onMouseLeave={() => this.onMouseLeave('womenDropdownOpen')}
                   isOpen={this.state.womenDropdownOpen} toggle={() => this.toggle('womenDropdownOpen')}>
-          <DropdownToggle caret>
-            <Link to="/catalogs/women">Women</Link>
+          <DropdownToggle  className='link-button'>
+            <Link to="/catalogs/women" className='link-name'>Women</Link>
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem> <CategoriesNav catalog={'women'}/> </DropdownItem>
@@ -64,8 +64,8 @@ export default class AppHeaderNavLeft extends React.Component {
         <Dropdown className="d-inline-block" onMouseOver={() => this.onMouseEnter('kidsDropdownOpen')}
                   onMouseLeave={() => this.onMouseLeave('kidsDropdownOpen')}
                   isOpen={this.state.kidsDropdownOpen} toggle={() => this.toggle('kidsDropdownOpen')}>
-          <DropdownToggle caret>
-            <Link to="/catalogs/kids">Kids</Link>
+          <DropdownToggle  className='link-button'>
+            <Link to="/catalogs/kids" className='link-name'>Kids</Link>
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem> <CategoriesNav catalog={'kids'}/> </DropdownItem>
