@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faDollarSign, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const AppHeaderNavRight = () => (
+  <div className='nav-wrap'>
     <nav className="nav-bar">
         <ul>
             <li key="4">
@@ -26,6 +27,7 @@ const AppHeaderNavRight = () => (
             </li>
         </ul>
     </nav>
+  </div>
 );
 
 export default AppHeaderNavRight;
