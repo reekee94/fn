@@ -1,17 +1,21 @@
-import { 
+import {
     categoriesLoaded,
-    categoriesRequested, 
+    categoriesRequested,
 } from "./Categories-actions";
-import { 
+import {
     productsLoaded,
-    productsRequested, 
+    productsRequested,
 } from "./Products-actions";
 
-import { 
+import {
     catalogLoaded,
     catalogsLoaded,
     catalogsRequested,
- } from "./Catalogs-actions"
+} from "./Catalogs-actions"
+import {
+    productsSearch,
+    productsSearchWord
+} from "./Search-actions"
 
 export {
     categoriesLoaded,
@@ -21,4 +25,6 @@ export {
     catalogLoaded,
     catalogsLoaded,
     catalogsRequested,
+    productsSearch,
+    productsSearchWord,
 }

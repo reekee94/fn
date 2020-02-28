@@ -9,7 +9,6 @@ import LoadingSpinner from '../Loading-spinner';
 
 
 const CatalogsList = ( { storeService, catalogsLoaded, catalogsRequested, catalogs, loading } ) => {
-    
     useEffect(() => {
         catalogsRequested()
         storeService.getAllCatalogs()
