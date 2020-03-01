@@ -2,7 +2,6 @@ import { categoriesLoaded, categoriesRequested } from './Categories-actions';
 import { productsLoaded, productsRequested } from './Products-actions';
 import { catalogsLoaded, catalogsRequested, catalogLoaded } from './Catalogs-actions';
 
-
 import {
     filterAddBrand,
     filterAddCategory,
@@ -11,10 +10,6 @@ import {
     filterRemoveColor,
     filterRemoveBrand,
     composeFilters,
-    fetchSuccessBrands,
-    fetchSuccessCategories,
-    fetchSuccessColors,
-    composeReceivedData,
 } from './Filter-actions';
 
 export {
@@ -32,8 +27,4 @@ export {
     filterRemoveCategory,
     filterRemoveColor,
     composeFilters,
-    fetchSuccessBrands,
-    fetchSuccessCategories,
-    fetchSuccessColors,
-    composeReceivedData,
 };
