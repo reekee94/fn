@@ -5,8 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import './Product-list-item.css';
 
-import './Product-list-item.css'
-
 function ProductListItem({ title, description, id, images, price, msrp }) {
     return (
         <Card key={id} className="productCart">

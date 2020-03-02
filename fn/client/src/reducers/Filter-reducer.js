@@ -4,9 +4,7 @@ const instate = {
     products: [],
     category: [],
     color: [],
-    receivedBrands: [],
-    receivedCategories: [],
-    receivedColors: [],
+  
 };
 
 const filter = (state = instate, action) => {
@@ -52,16 +50,7 @@ const filter = (state = instate, action) => {
                 category: [...category],
             };
         }
-        case 'COMPOSE_RECEIVED_DATA': {
-            const productsUnique = [
-                ...new Set(state.receivedBrands, ...state.receivedCategories, ...state.receivedColors),
-            ];
 
-            return {
-                ...state,
-                products: [...productsUnique],
-            };
-        }
         default:
             return state;
     }

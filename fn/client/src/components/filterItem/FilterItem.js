@@ -3,6 +3,7 @@ import './FilterItem.css';
 
 export const FilterItem = props => {
     const { items = [], type, handler  } = props;
+    
     const elements = items.map(item => (
         <li key={item[type]} >
             <label className="list-group-item">
