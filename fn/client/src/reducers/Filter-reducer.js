@@ -4,7 +4,6 @@ const instate = {
     products: [],
     category: [],
     color: [],
-  
 };
 
 const filter = (state = instate, action) => {
