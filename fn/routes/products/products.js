@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
     try {
         const filter = await getFilters(query);
         const projection = await getProjection(query);
-        const sort = await getSort(query);
+        let sort = await getSort(query);
 
         if (projection.score) {
             skip = 0;
