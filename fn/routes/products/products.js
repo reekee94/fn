@@ -16,19 +16,21 @@ router.get('/', async (req, res) => {
     let { currentpage, postsperpage } = query;
     currentpage = currentpage || 1;
     postsperpage = postsperpage || 15;
-    const skip = currentpage * postsperpage;
+    let skip = currentpage * postsperpage;
     const { sortbyprice } = query;
 
     try {
         const filter = await getFilters(query);
         const projection = await getProjection(query);
-        let sort = await getSort(query);
+        const sort = await getSort(query);
 
         if (projection.score) {
             skip = 0;
         }
 
-        const products = await Products.find(filter, projection).sort(sort).skip(+skip)
+        const products = await Products.find(filter, projection)
+            .sort(sort)
+            .skip(+skip)
             .limit(+postsperpage)
             .sort({ price: sortbyprice })
             .populate('catalog')
@@ -41,12 +43,7 @@ router.get('/', async (req, res) => {
         }
 
         const productsToSend = prepareProductsToSend(products);
-        const foundProductsNumber = await Products.find(filter)
-            .count()
-            .populate('catalog')
-            .populate('category')
-            .populate('color')
-            .populate('brand');
+        const foundProductsNumber = await Products.find(filter).count();
 
         if (!foundProductsNumber) {
             throw { message: 'Products not found ' };
@@ -205,9 +202,8 @@ const getProjection = async query => {
     const projection = {};
 
     if (isNotBlank(searchTerm)) {
-
         // how much each product is relevant to searchTerm
-        projection.score = { $meta: "textScore" }
+        projection.score = { $meta: 'textScore' };
     }
     return projection;
 };
@@ -217,13 +213,11 @@ const getSort = async query => {
     const sort = {};
 
     if (isNotBlank(searchTerm)) {
-
         // sort by relevance
-        sort.score = { $meta: "textScore" };
+        sort.score = { $meta: 'textScore' };
     }
     return sort;
 };
-
 
 const prepareProductsToSend = products => {
     const productsToSend = products.map(product => {
@@ -247,6 +241,6 @@ const prepareProductsToSend = products => {
     return productsToSend;
 };
 
-const isNotBlank = str => !(!str || 0 === str.trim().length);
+const isNotBlank = str => !(!str || str.trim().length === 0);
 
 module.exports = router;
