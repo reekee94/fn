@@ -84,15 +84,15 @@ router.post('/', productValidationRules(), validate, async (req, res) => {
         if (!catalog) throw { message: 'Bad catalog name' };
 
         const requestedCategory = req.body.category;
-        const category = await Categories.findOne(requestedCategory);
+        const category = await Categories.findOne({ category: requestedCategory });
         if (!category) throw { message: 'Bad category name' };
 
         const requestedBrand = req.body.brand;
-        const brand = await Brands.findOne(requestedBrand);
+        const brand = await Brands.findOne({ brand: requestedBrand });
         if (!brand) throw { message: 'Bad brand name' };
 
         const requestedColor = req.body.color;
-        const color = await Colors.findOne(requestedColor);
+        const color = await Colors.findOne({ color: requestedColor });
         if (!color) throw { message: 'Bad color name' };
 
         const product = new Products({
