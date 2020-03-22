@@ -17,7 +17,7 @@ function ProductListItem({ title, description, id, images, price, msrp, currency
         setPriceWithRate(Math.floor(price * currency));
         setMsrpWithRate(Math.floor(msrp * currency));
         currency === 1 ? setCurrencyIcon('€') : setCurrencyIcon('$');
-    }, [currency, price, msrp]);
+    });
 
     return (
         <Card key={id} className="productCart">
@@ -33,7 +33,7 @@ function ProductListItem({ title, description, id, images, price, msrp, currency
                     <FontAwesomeIcon icon={faHeart} className="heart"
                            onClick={() => addToWishlist({id, title, description, images})}/>
           <FontAwesomeIcon icon={faShoppingCart} className="cart"
-                           onClick={() => addToCart({id, title, price, msrp, currencyIcon, images})}/>
+                           onClick={() => addToCart({id, title, price, msrp, images})}/>
                 </Card.Body>
             </Card.Body>
         </Card>

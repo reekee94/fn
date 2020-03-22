@@ -1,7 +1,7 @@
 const initialState = {
   cartNumbers: 0,
   products: [],
-  currency: 1,
+  currencyCart: 1,
 };
 
 export default (state = initialState, action) => {
@@ -29,7 +29,7 @@ export default (state = initialState, action) => {
       case 'CURRENCY_CHANGE_CART':
         return {
             ...state,
-            currency: action.payload,
+            currencyCart: action.payload,
         };
 
     case 'INCREASE_TO_CART':

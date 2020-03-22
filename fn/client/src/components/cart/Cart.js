@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import connect from "react-redux/es/connect/connect";
 import './Cart.css'
 import {Figure} from 'react-bootstrap'
@@ -10,9 +10,18 @@ import { faTrash, faPlus, faMinus} from '@fortawesome/free-solid-svg-icons';
 import {increaseToCart, decreaseFromCart, removeFromCart } from '../../actions'
 
 
-const Cart = ({products, increaseToCart, decreaseFromCart, removeFromCart}) => {
+const Cart = ({products, increaseToCart, decreaseFromCart, removeFromCart, currencyCart}) => {
 
   const [product, setProduct] = useState(products)
+  // const [currencyIcon, setCurrencyIcon] = useState();
+  // const [priceWithRate, setPriceWithRate] = useState();
+  // const [msrpWithRate, setMsrpWithRate] = useState([]);
+
+  // useEffect(() => {
+  //     setPriceWithRate(products.map(i=> Math.floor(i.price * currencyCart)));
+  //     setMsrpWithRate(products.map(i=> Math.floor(i.msrp * currencyCart)));
+  //     currencyCart === 1 ? setCurrencyIcon('€') : setCurrencyIcon('$');
+  // });
 
   const removeFromCart1 = (id) => {
     const newProducts = products.map(el=>
@@ -73,8 +82,12 @@ const Cart = ({products, increaseToCart, decreaseFromCart, removeFromCart}) => {
                 <Figure.Caption className='cart-title'>
                   {item.title}
                   <p> Price: 
-                  <span className="price">{item.price * item.quantity} {item.currencyIcon}</span>
-                  <span className="msrp-price">{item.msrp * item.quantity} {item.currencyIcon}</span>
+                  {/* {priceWithRate.map(i=>
+                  products.indexOf(item)===priceWithRate.indexOf(i) ? <span className="price">{i * item.quantity} {currencyIcon}</span> :
+                  '')}  */}
+                  {/* {msrpWithRate.map(i=>
+                  products.indexOf(item)===msrpWithRate.indexOf(i) ? <span className="msrp-price">{i * item.quantity} {currencyIcon}</span> :
+                  '')}  */}
                   </p>
                   <div className="quantity-control">
                   <FontAwesomeIcon
@@ -103,7 +116,7 @@ const Cart = ({products, increaseToCart, decreaseFromCart, removeFromCart}) => {
   )
 };
 
-const mapStateToProps = ({cartReducer: {products}}) => ({products});
+const mapStateToProps = ({cartReducer: {products}, cartReducer: {currencyCart}}) => ({products, currencyCart});
 
 export default connect(mapStateToProps, {increaseToCart, decreaseFromCart, removeFromCart})(Cart);
 

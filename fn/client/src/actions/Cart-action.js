@@ -43,6 +43,15 @@ const removeFromCart = (quantity) => {
   }
 };
 
+const currencyChangeCart = newCurrency => {
+  return(dispatch) => {
+    dispatch({
+      type: 'CURRENCY_CHANGE_CART',
+      payload: newCurrency,
+    })
+  }
+};
+
 
 export  {
   addToCart,
@@ -50,6 +59,7 @@ export  {
   increaseToCart, 
   decreaseFromCart, 
   removeFromCart,
+  currencyChangeCart
 }
 
 

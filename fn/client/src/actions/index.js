@@ -12,7 +12,7 @@ import {
   sizesLoaded,
 } from './Products-actions';
 
-import {addToCart, getNumbers, increaseToCart, decreaseFromCart, removeFromCart} from './Cart-action'
+import {addToCart, getNumbers, increaseToCart, decreaseFromCart, removeFromCart, currencyChangeCart} from './Cart-action'
 import {addToWishlist} from './Wishlist-actions'
 
 import {
@@ -72,4 +72,5 @@ export {
   decreaseFromCart,
   removeFromCart,
   addToWishlist,
+  currencyChangeCart
 };
