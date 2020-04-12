@@ -25,13 +25,17 @@ const USER_DATA = {
     lastName: '',
     email: '',
     password: '',
+    cart: {
+        cartProducts: [],
+        cartNumbers: 0
+    },
 }
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 
 const Register = (props) => {
     const [user, setUser] = useState(USER_DATA);
-    const { setUserLogged, setUserLoading, userLogged, userLoading, storeService } = props;
+    const { setUserLogged, setUserLoading, userLogged, userLoading } = props;
     const [errorMsg, setErrorMsg] = useState('');
     const { register, handleSubmit, errors } = useForm({
         validationSchema: SignupSchemaRegister
@@ -58,14 +62,8 @@ const Register = (props) => {
     const postUser = async (value, route) => {
         try {
             setUserLoading();
-            const response = await axios.post(route, value);
-            addDataToLocalStorage(response.data);
-            const userId = response.data.user._id
-            const newCart = await storeService.createCart({userId})
-            const userToUpdate = response.data.user
-            userToUpdate.cart = newCart._id
-            const {accessToken}= response.data
-            const updatedUser = await storeService.sendUserChangedData(userId, accessToken, {user: userToUpdate} )
+            const response = await axios.post(route, value)
+            addDataToLocalStorage(response.data)
             setUserLogged(true);
 
         } catch (error) {

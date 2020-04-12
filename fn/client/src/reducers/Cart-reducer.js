@@ -1,3 +1,12 @@
+// let cartNumbers
+// let cartProducts
+//
+// if (userId) {
+//   const user = storeService.getUserById(userId)
+//   cartNumbers = user.cart.cartNumbers;
+//   cartProducts = user.cart.cartProducts;
+// }
+
 const productCollection = JSON.parse(localStorage.getItem("products-collection"));
 const localCartNumbers = JSON.parse(localStorage.getItem("cart-numbers"));
 

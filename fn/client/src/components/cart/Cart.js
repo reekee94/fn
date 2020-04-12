@@ -45,21 +45,9 @@ const Cart = ({cartProducts, increaseToCart, decreaseFromCart, removeFromCart, c
           }
 
         return () => {
-          storeService.getUserById(userId, accessToken).then((res) => {
-            cartId = res.data.user.cart
-            const toBackItems = cartProducts.map(el => {
-              return {
-                productId: el.id,
-                productSizeId: el.propetries._id,
-                quantity: el.quantity
-              }
-            })
-            const readyItemsToBackend = {
-              cartItems: toBackItems,
-              userId: userId
-            }
-            storeService.updateCart(cartId, readyItemsToBackend)
-          })
+          // if(userId) {
+          //   storeservice.putUser( userId, {cart: {cartProducts, cartNumbers }})
+          // }
         }
       }, []);
 

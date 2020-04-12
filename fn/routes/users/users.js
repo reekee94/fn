@@ -50,8 +50,8 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/register', userValidationRules(), validate, async (req, res) => {
-    const { firstName, lastName, email, password, role } = req.body;
+router.post('/register', async (req, res) => {
+    const { firstName, lastName, email, password, role, cart } = req.body;
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -61,6 +61,7 @@ router.post('/register', userValidationRules(), validate, async (req, res) => {
             lastName,
             email,
             role,
+            cart,
             password: hashedPassword,
         });
 
