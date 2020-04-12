@@ -3,8 +3,6 @@ import './Register.css';
 import { Form, Button } from 'react-bootstrap';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
-import { REGISTER_ROUTE } from "../../configs/login-register-config";
-import axios from "axios";
 import { setUserLogged, setUserLoading } from "../../actions";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,7 +31,7 @@ const USER_DATA = {
 
 const eye = <FontAwesomeIcon icon={faEye} />;
 
-const Register = (props) => {
+const Register = (props, { storeService }) => {
     const [user, setUser] = useState(USER_DATA);
     const { setUserLogged, setUserLoading, userLogged, userLoading } = props;
     const [errorMsg, setErrorMsg] = useState('');
@@ -59,22 +57,22 @@ const Register = (props) => {
         setUser(prevUser => ({ ...prevUser, [event.target.name]: event.target.value }));
     };
 
-    const postUser = async (value, route) => {
+    const postUser = async (value) => {
         try {
             setUserLoading();
-            const response = await axios.post(route, value)
+            const response = await storeService.postUser(value)
             addDataToLocalStorage(response.data)
             setUserLogged(true);
 
         } catch (error) {
             setUserLogged(false)
-            const {msg} = error
+            const {msg} = error.response.data.errors[0]
             setErrorMsg(msg)
         }
     }
 
     const handleOnSubmit = (event) => {
-        postUser(user, REGISTER_ROUTE);
+        postUser(user);
     };
 
     if (userLoading) {

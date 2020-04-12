@@ -3,15 +3,13 @@ import './Login.css';
 import { Form, Button } from 'react-bootstrap';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from "react-redux";
-import { LOGIN_ROUTE } from "../../configs/login-register-config";
-import axios from "axios";
 import { setUserLogged, setUserLoading } from "../../actions";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import LoadingSpinner from "../Loading-spinner";
 import { SignupSchemaLogin } from '../../configs/login-register-config'
-
+import withStoreService from "../hoc";
 
 
 const addDataToLocalStorage = (token) => {
@@ -26,7 +24,7 @@ const USER_DATA = {
 };
 const eye = <FontAwesomeIcon icon={faEye} />;
 
-const Login = (props) => {
+const Login = (props, { storeService }) => {
     const [user, setUser] = useState(USER_DATA);
     const [errorMsg, setErrorMsg] = useState('');
     const { setUserLogged, setUserLoading, userLogged, userLoading } = props;
@@ -48,10 +46,10 @@ const Login = (props) => {
         setUser(prevUser => ({ ...prevUser, [event.target.name]: event.target.value }));
     };
 
-    const postUser = async (value, route) => {
+    const postUser = async (value) => {
         try {
             setUserLoading();
-            const response = await axios.post(route, value);
+            const response = await storeService.userLogin(value);
             setUserLogged(true);
             addDataToLocalStorage(response.data);
         } catch (error) {
@@ -61,7 +59,7 @@ const Login = (props) => {
         }
     }
     const handleOnSubmit = event => {
-        postUser(user, LOGIN_ROUTE);
+        postUser(user);
     };
 
     if (userLoading) {
@@ -136,4 +134,4 @@ const mapStateToProps = ({ authReducer: { userLogged, userLoading } }) => ({
     userLogged, userLoading
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default withStoreService()(connect(mapStateToProps, mapDispatchToProps)(Login));

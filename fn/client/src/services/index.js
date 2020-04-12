@@ -162,4 +162,13 @@ export default class StoreService {
   updateCart = async ( id, cartItem ) => {
     return axios({ method: 'PUT', url: `${this._apiBase}cart/${id}`, cartItem })
   };
+
+  postUser = async ( userData ) => {
+    const user = await axios({ method: 'PUT', url: `${this._apiBase}users/register`, userData})
+    return user
+  }
+  userLogin = async ( userData ) => {
+    const user = await this.getResource('/auth/login', userData)
+    return user
+  }
 }

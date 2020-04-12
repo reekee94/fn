@@ -15,39 +15,23 @@ const accessToken = JSON.parse(localStorage.getItem('accessToken'))
 
 const Cart = ({cartProducts, increaseToCart, decreaseFromCart, removeFromCart, currencyIcon, currency, storeService}) => {
   const [products, setProducts] = useState(cartProducts)
-  let cartId
 
   useEffect(
       () => {
         if (userId)
-        {
-          storeService.getUserById(userId, accessToken).then((res) => {
-            cartId = res.data.user.cart
-            storeService.getCartById(cartId).then((res) => {
-              console.log(res)
-              const cartItemRes = res.cartItems
-              if (cartItemRes) {
-                const productByCartPromises = cartItemRes.map(item => storeService.getProductById(item.productId));
-                Promise.all(productByCartPromises).then(responses => {
-                  responses.forEach((item, index) => {
-                    if (cartItemRes && cartItemRes.length) {
-                      const allItemsFromBack = ({...item, propetries: item.propetries.filter(itemProperty => itemProperty['_id'] === cartItemRes[index].productSizeId)[0]})
-                      setProducts(allItemsFromBack)
-                    }
-                  });
-                });
-              }
-
-            })
-          })
+        { storeService.getUserById(userId, accessToken).then((res) => {
+            const cartFromUser = res.data.user.cart
+                      setProducts(allItemsFromBack) })
         } else if (localStorage.getItem('products-collection')) {
           setProducts(JSON.parse(localStorage.getItem('products-collection')));
-          }
+        }
 
         return () => {
-          // if(userId) {
-          //   storeservice.putUser( userId, {cart: {cartProducts, cartNumbers }})
-          // }
+          if(userId && userId !== 'undefined') {
+            storeService.getUserById(userId, accessToken).then((res) => {
+            }
+            storeService.sendUserChangedData(userId, accessToken,{cart: {cartProducts, cartNumbers }})
+          }
         }
       }, []);
 
